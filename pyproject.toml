@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "clamps"
-version = "0.0.3"
+version = "0.0.4"
 description = "SDL2 joystick driver for python"
 authors = ["walchko <walchko@users.noreply.github.com>"]
 readme = "readme.md"
