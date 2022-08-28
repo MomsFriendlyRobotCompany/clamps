@@ -3,3 +3,5 @@
 DS_Store
 dist
 build
+__pycache__
+.pytest_cache

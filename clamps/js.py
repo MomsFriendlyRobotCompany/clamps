@@ -20,7 +20,7 @@ except ImportError:
 from collections import namedtuple
 
 Axis = namedtuple("Axis", "x y")
-PS4Buttons = namedtuple("PS4Buttons",
+PSButtons = namedtuple("PSButtons",
     "x circle square triangle share ps options L3 R3 L1 R1 dp_up dp_down dp_left dp_right pad")
 JS = namedtuple("JS", "info leftstick rightstick triggers buttons")
 JSInfo = namedtuple("JSInfo", "num_buttons num_axes num_hats")
@@ -31,8 +31,17 @@ class Joystick:
         sdl2.SDL_Init(sdl2.SDL_INIT_JOYSTICK)
         self.js = sdl2.SDL_JoystickOpen(num)
 
-    def setup(self, btns, axes, hats):
+        axes = sdl2.SDL_JoystickNumAxes(self.js)
+        btns = sdl2.SDL_JoystickNumButtons(self.js)
+        hats = sdl2.SDL_JoystickNumHats(self.js)
+
         self.info = JSInfo(btns, axes, hats)
+
+        if axes < 1:
+            print('*** No Joystick found ***')
+            self.valid = False
+        else:
+            self.valid = True
 
     def dump_buttons(self):
         # debug buttons
@@ -87,22 +96,15 @@ class PS4Joystick(Joystick):
 
         super().__init__(num)
 
-        # grab info for display
-        a = sdl2.SDL_JoystickNumAxes(self.js)
-        b = sdl2.SDL_JoystickNumButtons(self.js)
-        h = sdl2.SDL_JoystickNumHats(self.js)
-
-        super().setup(b,a,h) # buttons, axes, hats
-
-        if a == -1:
+        if self.valid is False:
             print('*** No Joystick found ***')
-            self.valid = False
+            # self.valid = False
         else:
             print('==========================================')
             print(' PS4 Joystick ')
-            print('   axes:', a, 'buttons:', b, 'hats:', h)
+            print(f'   axes: {self.info.num_axes} buttons: {self.info.num_buttons} hats: {self.info.num_hats}')
             print('==========================================')
-            self.valid = True
+            # self.valid = True
 
     def __del__(self):
         # clean-up
@@ -139,7 +141,7 @@ class PS4Joystick(Joystick):
         # print('b 13', sdl2.SDL_JoystickGetButton(js, 13))
 
         vals = [True if sdl2.SDL_JoystickGetButton(js, i) else False for i in range(self.info.num_buttons)]
-        buttons = PS4Buttons(*vals)
+        buttons = PSButtons(*vals[:16])
 
         ps4 = JS(
             self.info, # joystick info
@@ -160,11 +162,19 @@ class PS4Joystick(Joystick):
 
         return ps4
 
+class PS5Joystick(PS4Joystick):
+    """
+    So there is no difference between PS4 and PS5 joysticks. The 5 has 1 extra buttone
+    but I don't enable it ... it is the audio mute LED button at the very back. It didn't
+    seem worth the effort to duplicate code just for that.
+    """
+    pass
 
 def main():
     import time
 
-    js = PS4Joystick()
+    # js = PS4Joystick()
+    js = PS5Joystick()
 
     while js.valid:
         try:

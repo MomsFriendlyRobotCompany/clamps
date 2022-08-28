@@ -30,8 +30,13 @@ Tested:
 - Works with joystick connected via USB cable
 - Works with joystick connected via bluetooth
 - Works with PS4 controller
+- Works with PS5 controller
 
 ## Example
+
+So really, there is no difference between `PS4Joystick` amd `PS5Joystick`,
+but both classes exist. Originally I hoped there would be a difference,
+like access to the gyros and accelerometers, but there isn't.
 
 ```python
 #!/usr/bin/env python3
@@ -41,7 +46,7 @@ from clamps import PS4Joystick
 def main():
     import time
 
-    js = PS4Joystick()
+    js = PS4Joystick() # or PS5Joystick()
 
     while js.valid:
         try:

@@ -1,14 +1,14 @@
 [tool.poetry]
 name = "clamps"
-version = "0.0.4"
-description = "SDL2 joystick driver for python"
+version = "0.1.0"
+description = "SDL2 playstation joystick driver for python"
 authors = ["walchko <walchko@users.noreply.github.com>"]
 readme = "readme.md"
 license = "MIT"
 homepage = "https://pypi.org/project/clamps/"
 repository = 'https://github.com/MomsFriendlyRobotCompany/clamps'
 # documentation = "http://..."
-keywords = ['sdl', 'joystick','sdl2']
+keywords = ['sdl', 'joystick','sdl2', "ps4", "ps5"]
 classifiers = [
     'Development Status :: 4 - Beta',
     'Intended Audience :: Developers',
