@@ -1,4 +1,5 @@
-![](clamps.png)
+
+![](https://github.com/MomsFriendlyRobotCompany/clamps/blob/master/clamps.png?raw=true)
 
 # clamps
 
@@ -73,7 +74,8 @@ If the player indicator is on, press and hold the PS button until it turns off. 
 1. While pressing and holding the SHARE button, press and hold the PS Button until the light bar flashes.
 1. Enable Bluetooth on your device, and then select the controller from the list of Bluetooth devices. When pairing is complete, the light bar blinks, and then the player indicator lights up.
 
-![](js.webp)
+
+![](https://github.com/MomsFriendlyRobotCompany/clamps/blob/master/js.webp?raw=true)
 
 [ref]: https://www.playstation.com/en-us/support/hardware/ps4-pair-dualshock-4-wireless-with-pc-or-mac/
 

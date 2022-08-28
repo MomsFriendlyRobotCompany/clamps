@@ -138,12 +138,6 @@ class PS4Joystick(Joystick):
         # print("hat", sdl2.SDL_JoystickGetHat(js, 0), "\n")
         # print('b 13', sdl2.SDL_JoystickGetButton(js, 13))
 
-
-        # # debug buttons
-        # print("Buttons")
-        # for i in range(self.ps4["num_buttons"]):
-        #     print(f"  {i}: {sdl2.SDL_JoystickGetButton(js, i)}")
-
         vals = [True if sdl2.SDL_JoystickGetButton(js, i) else False for i in range(self.info.num_buttons)]
         buttons = PS4Buttons(*vals)
 
@@ -174,14 +168,14 @@ def main():
 
     while js.valid:
         try:
-            # ps4 = js.get()
-            # print(ps4,"\n----------------------\n")
-            # time.sleep(0.1)
-            # if ps4.buttons.pad is True:
-            #     break
+            ps4 = js.get()
+            print(ps4,"\n----------------------\n")
+            time.sleep(0.1)
+            if ps4.buttons.pad is True:
+                break
 
-            js.dump_buttons()
-            js.dump_axes()
+            # js.dump_buttons()
+            # js.dump_axes()
 
         except KeyboardInterrupt:
             print('js exiting ...')
