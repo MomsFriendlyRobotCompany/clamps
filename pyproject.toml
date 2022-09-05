@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "clamps"
-version = "0.1.1"
+version = "0.1.3"
 description = "SDL2 playstation joystick driver for python"
 authors = ["walchko <walchko@users.noreply.github.com>"]
 readme = "readme.md"

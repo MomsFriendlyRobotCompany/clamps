@@ -41,7 +41,21 @@ class Joystick:
             print('*** No Joystick found ***')
             self.valid = False
         else:
+            print('==========================================')
+            print(' PS4 Joystick ')
+            print(f'   axes: {self.info.num_axes} buttons: {self.info.num_buttons} hats: {self.info.num_hats}')
+            print('==========================================')
             self.valid = True
+
+    def __del__(self):
+        # clean-up
+        if self.valid:
+            self.close()
+        print('Bye ...')
+
+    def close(self):
+        sdl2.SDL_JoystickClose(self.js)
+        self.valid = False
 
     def dump_buttons(self):
         # debug buttons
@@ -57,11 +71,13 @@ class Joystick:
         for i in range(self.info.num_axes):
             print(f"  {i}: {sdl2.SDL_JoystickGetAxis(self.js, i) / 32768}")
 
+
 class PS4Joystick(Joystick):
     """
     Joystick class setup to handle a Playstation PS4 Controller. If no joystick
     is found, the self.valid is False. If it is not valid, then any returned
     dictionaries will contain all 0 values.
+
     Buttons     Index number
     --------------------------
         X       = 0
@@ -93,31 +109,9 @@ class PS4Joystick(Joystick):
     WARNING: doesn't work as a process
     """
     def __init__(self, num=0):
-
         super().__init__(num)
 
-        if self.valid is False:
-            print('*** No Joystick found ***')
-            # self.valid = False
-        else:
-            print('==========================================')
-            print(' PS4 Joystick ')
-            print(f'   axes: {self.info.num_axes} buttons: {self.info.num_buttons} hats: {self.info.num_hats}')
-            print('==========================================')
-            # self.valid = True
-
-    def __del__(self):
-        # clean-up
-        if self.valid:
-            self.stop()
-        print('Bye ...')
-
-    def stop(self):
-        sdl2.SDL_JoystickClose(self.js)
-        self.valid = False
-
-    def get(self):
-        # ps4 = self.ps4
+    def get(self, raw=False):
         js = self.js
 
         sdl2.SDL_JoystickUpdate()
@@ -143,22 +137,40 @@ class PS4Joystick(Joystick):
         vals = [True if sdl2.SDL_JoystickGetButton(js, i) else False for i in range(self.info.num_buttons)]
         buttons = PSButtons(*vals[:16])
 
-        ps4 = JS(
-            self.info, # joystick info
-            Axis( # left stick
-                sdl2.SDL_JoystickGetAxis(js, 0) / 32768,
-                sdl2.SDL_JoystickGetAxis(js, 1) / 32768
-            ),
-            Axis( # right stick
-                sdl2.SDL_JoystickGetAxis(js, 2) / 32768,
-                sdl2.SDL_JoystickGetAxis(js, 3) / 32768
-            ),
-            Axis( # triggers L2 R2
-                sdl2.SDL_JoystickGetAxis(js, 4) / 32768 + 1,
-                sdl2.SDL_JoystickGetAxis(js, 5) / 32768 + 1
-            ),
-            buttons
-        )
+        if raw:
+            ps4 = JS(
+                self.info, # joystick info
+                Axis( # left stick
+                    sdl2.SDL_JoystickGetAxis(js, 0),
+                    sdl2.SDL_JoystickGetAxis(js, 1)
+                ),
+                Axis( # right stick
+                    sdl2.SDL_JoystickGetAxis(js, 2),
+                    sdl2.SDL_JoystickGetAxis(js, 3)
+                ),
+                Axis( # triggers L2 R2
+                    sdl2.SDL_JoystickGetAxis(js, 4) + 32768,
+                    sdl2.SDL_JoystickGetAxis(js, 5) + 32768
+                ),
+                buttons
+            )
+        else:
+            ps4 = JS(
+                self.info, # joystick info
+                Axis( # left stick
+                    sdl2.SDL_JoystickGetAxis(js, 0) / 32768,
+                    sdl2.SDL_JoystickGetAxis(js, 1) / 32768
+                ),
+                Axis( # right stick
+                    sdl2.SDL_JoystickGetAxis(js, 2) / 32768,
+                    sdl2.SDL_JoystickGetAxis(js, 3) / 32768
+                ),
+                Axis( # triggers L2 R2
+                    sdl2.SDL_JoystickGetAxis(js, 4) / 32768 + 1,
+                    sdl2.SDL_JoystickGetAxis(js, 5) / 32768 + 1
+                ),
+                buttons
+            )
 
         return ps4
 
